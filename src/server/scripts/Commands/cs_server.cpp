@@ -255,11 +255,6 @@ public:
         handler->PSendSysMessage("PlayerbotsDatabase queue size: %zu", PlayerbotsDatabase.QueueSize());
 #endif
 
-        if (Acore::Module::GetEnableModulesList().empty())
-            handler->SendSysMessage("No modules enabled");
-        else
-            handler->SendSysMessage("> List enable modules:");
-
         for (auto const& modName : Acore::Module::GetEnableModulesList())
         {
             handler->SendSysMessage(Acore::StringFormatFmt("- {}", modName));
