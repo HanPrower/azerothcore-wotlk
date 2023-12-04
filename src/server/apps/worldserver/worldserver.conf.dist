@@ -780,11 +780,13 @@ Metric.Enable = 0
 
 #
 #    Metric.Interval
-#        Description: Interval between every batch of data sent in seconds
-#        Default:     10 seconds
+#        Description: Interval between every batch of data sent in seconds.
+#                     Longer interval means larger batch of data. If the batch
+#                     is too big, it might get rejected.
+#        Default:     1 second
 #
 
-Metric.Interval = 10
+Metric.Interval = 1
 
 #
 #    Metric.ConnectionInfo
@@ -1364,17 +1366,6 @@ DetectPosCollision = 1
 #                     0 - (Disabled, may break some boss encounters)
 
 CheckGameObjectLoS = 1
-
-#
-#    TargetPosRecalculateRange
-#        Description: Max distance from movement target point (+moving unit size) and targeted
-#                     object (+size) after that new target movement point calculated.
-#        Range:       0.5-5.0
-#        Default:     1.5
-#                     0.5 - (Minimum, Contact Range, More sensitive reaction to target movement)
-#                     5.0 - (Maximum, Melee attack range, Less CPU usage)
-
-TargetPosRecalculateRange = 1.5
 
 #
 #    PreloadAllNonInstancedMapGrids
@@ -2055,6 +2046,13 @@ Rate.Damage.Fall = 1
 #        Default:     1
 
 Rate.Talent = 1
+
+#
+#    Rate.Talent.Pet
+#        Description: Pet Talent point rate.
+#        Default:     1
+
+Rate.Talent.Pet = 1
 
 #
 #    Rate.Health
@@ -3359,6 +3357,13 @@ Guild.BankTabCost4 = 25000000
 Guild.BankTabCost5 = 50000000#
 
 #
+#     Guild.MemberLimit
+#        Description: Do not allow inviting new players to the guild if the member limit is met or exceeded.
+#        Default:     0 - Disabled
+
+Guild.MemberLimit = 0
+
+#
 ###################################################################################################
 
 ###################################################################################################
@@ -4349,6 +4354,13 @@ TeleportTimeoutNear = 25
 #       Default:  45
 
 TeleportTimeoutFar = 45
+
+#
+#    DailyRBGArenaPoints.MinLevel
+#        Description: Allows gaining arena points on the first RBG win at level 70.
+#        Default: 71 - (Blizzlike)
+
+DailyRBGArenaPoints.MinLevel = 71
 
 #
 ###################################################################################################

@@ -15,7 +15,9 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "boss_patchwerk.h"
+#include "CreatureScript.h"
+#include "ScriptedCreature.h"
+#include "naxxramas.h"
 
 void AddSC_boss_patchwerk()
 {

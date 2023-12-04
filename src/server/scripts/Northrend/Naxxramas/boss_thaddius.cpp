@@ -15,7 +15,13 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "boss_thaddius.h"
+#include "AreaTriggerScript.h"
+#include "CreatureScript.h"
+#include "Player.h"
+#include "ScriptedCreature.h"
+#include "SpellScript.h"
+#include "SpellScriptLoader.h"
+#include "naxxramas.h"
 
 void AddSC_boss_thaddius()
 {
