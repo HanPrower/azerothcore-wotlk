@@ -15,21 +15,20 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "MetricScript.h"
-#include "ScriptMgr.h"
-#include "ScriptMgrMacros.h"
+#ifndef SCRIPT_OBJECT_METRIC_SCRIPT_H_
+#define SCRIPT_OBJECT_METRIC_SCRIPT_H_
 
-void ScriptMgr::OnMetricLogging()
+#include "ScriptObject.h"
+
+class MetricScript : public ScriptObject
 {
-    ExecuteScript<MetricScript>([&](MetricScript* script)
-    {
-        script->OnMetricLogging();
-    });
-}
+protected:
+    MetricScript(const char* name);
 
-MetricScript::MetricScript(const char* name) : ScriptObject(name)
-{
-    ScriptRegistry<MetricScript>::AddScript(this);
-}
+public:
+    bool IsDatabaseBound() const { return false; }
 
-template class AC_GAME_API ScriptRegistry<MetricScript>;
+    virtual void OnMetricLogging() { }
+};
+
+#endif

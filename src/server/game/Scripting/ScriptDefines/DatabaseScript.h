@@ -31,6 +31,8 @@ public:
 
     [[nodiscard]] bool IsDatabaseBound() const override { return false; }
 
+    [[nodiscard]] virtual bool OnDatabasesLoading() { return true; }
+
     /**
      * @brief Called after all databases are loaded
      *
@@ -44,6 +46,12 @@ public:
      * @param creatureTemplates Pointer to a modifiable vector of creature templates. Indexed by Entry ID.
      */
     virtual void OnAfterDatabaseLoadCreatureTemplates(std::vector<CreatureTemplate*> /*creatureTemplates*/) { }
+
+    virtual void OnDatabasesKeepAlive() { }
+    virtual void OnDatabasesClosing() { }
+    virtual void OnDatabaseWarnAboutSyncQueries(bool /*apply*/) { }
+    virtual void OnDatabaseSelectIndexLogout(Player* /*player*/, uint32& /*statementIndex*/, uint32& /*statementParam*/) { }
+    virtual void OnDatabaseGetDBRevision(std::string& /*revision*/) { }
 
 };
 

@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "PlayerbotsScript.h"
 #include "ScriptMgr.h"
 #include "ScriptMgrMacros.h"
 
@@ -103,3 +104,10 @@ void ScriptMgr::OnPlayerbotLogoutBots()
         script->OnPlayerbotLogoutBots();
     });
 }
+
+PlayerbotScript::PlayerbotScript(const char* name) : ScriptObject(name)
+{
+    ScriptRegistry<PlayerbotScript>::AddScript(this);
+}
+
+template class AC_GAME_API ScriptRegistry<PlayerbotScript>;
