@@ -5,15 +5,15 @@
 #include "ScriptedCreature.h"
 #include "naxxramas.h"
 
-enum Says
+enum RazuviousSays
 {
-    SAY_AGGRO                       = 0,
-    SAY_SLAY                        = 1,
-    SAY_TAUNTED                     = 2,
-    SAY_DEATH                       = 3
+    RAZUVIOUS_SAY_AGGRO             = 0,
+    RAZUVIOUS_SAY_SLAY              = 1,
+    RAZUVIOUS_SAY_TAUNTED           = 2,
+    RAZUVIOUS_SAY_DEATH             = 3
 };
 
-enum Spells
+enum RazuviousSpells
 {
     SPELL_UNBALANCING_STRIKE        = 26613,
     SPELL_DISRUPTING_SHOUT_10       = 55543,
@@ -21,17 +21,17 @@ enum Spells
     SPELL_JAGGED_KNIFE              = 55550,
     SPELL_HOPELESS                  = 29125,
 
-    SPELL_TAUNT                     = 29060
+    RAZUVIOUS_SPELL_TAUNT           = 29060
 };
 
-enum Events
+enum RazuviousEvents
 {
     EVENT_UNBALANCING_STRIKE        = 1,
     EVENT_DISRUPTING_SHOUT          = 2,
     EVENT_JAGGED_KNIFE              = 3
 };
 
-enum Misc
+enum RazuviousMisc
 {
     NPC_DEATH_KNIGHT_UNDERSTUDY     = 16803,
     NPC_RAZUVIOUS                   = 16061
@@ -86,7 +86,7 @@ public:
         {
             if (roll_chance_i(30))
             {
-                Talk(SAY_SLAY);
+                Talk(RAZUVIOUS_SAY_SLAY);
             }
             if (who->GetTypeId() == TYPEID_PLAYER && pInstance)
             {
@@ -106,22 +106,22 @@ public:
         void JustDied(Unit*  killer) override
         {
             BossAI::JustDied(killer);
-            Talk(SAY_DEATH);
+            Talk(RAZUVIOUS_SAY_DEATH);
             me->CastSpell(me, SPELL_HOPELESS, true);
         }
 
         void SpellHit(Unit* caster, SpellInfo const* spell) override
         {
-            if (spell->Id == SPELL_TAUNT)
+            if (spell->Id == RAZUVIOUS_SPELL_TAUNT)
             {
-                Talk(SAY_TAUNTED, caster);
+                Talk(RAZUVIOUS_SAY_TAUNTED, caster);
             }
         }
 
         void JustEngagedWith(Unit* who) override
         {
             BossAI::JustEngagedWith(who);
-            Talk(SAY_AGGRO);
+            Talk(RAZUVIOUS_SAY_AGGRO);
             events.ScheduleEvent(EVENT_UNBALANCING_STRIKE, 20s);
             events.ScheduleEvent(EVENT_DISRUPTING_SHOUT, 15s);
             events.ScheduleEvent(EVENT_JAGGED_KNIFE, 10s);

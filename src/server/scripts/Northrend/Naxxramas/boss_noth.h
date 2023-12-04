@@ -5,20 +5,20 @@
 #include "ScriptedCreature.h"
 #include "naxxramas.h"
 
-enum Says
+enum NothSays
 {
-    SAY_AGGRO                               = 0,
-    SAY_SUMMON                              = 1,
-    SAY_SLAY                                = 2,
-    SAY_DEATH                               = 3,
-    EMOTE_SUMMON                            = 4,
-    EMOTE_SUMMON_WAVE                       = 5,
-    EMOTE_TELEPORT_BALCONY                  = 6,
-    EMOTE_TELEPORT_BACK                     = 7,
-    EMOTE_BLINK                             = 8
+    NOTH_SAY_AGGRO                          = 0,
+    NOTH_SAY_SUMMON                         = 1,
+    NOTH_SAY_SLAY                           = 2,
+    NOTH_SAY_DEATH                          = 3,
+    NOTH_EMOTE_SUMMON                       = 4,
+    NOTH_EMOTE_SUMMON_WAVE                  = 5,
+    NOTH_EMOTE_TELEPORT_BALCONY             = 6,
+    NOTH_EMOTE_TELEPORT_BACK                = 7,
+    NOTH_EMOTE_BLINK                        = 8
 };
 
-enum Spells
+enum NothSpells
 {
     SPELL_CURSE_OF_THE_PLAGUEBRINGER_10     = 29213,
     SPELL_CURSE_OF_THE_PLAGUEBRINGER_25     = 54835,
@@ -27,11 +27,11 @@ enum Spells
     SPELL_SUMMON_PLAGUED_WARRIORS           = 29237,
     SPELL_TELEPORT                          = 29216,
     SPELL_TELEPORT_BACK                     = 29231,
-    SPELL_BERSERK                           = 68378,
+    NOTH_SPELL_BERSERK                      = 68378,
     SPELL_BLINK                             = 29208
 };
 
-enum Events
+enum NothEvents
 {
     EVENT_CURSE                             = 1,
     EVENT_CRIPPLE                           = 2,
@@ -44,7 +44,7 @@ enum Events
     EVENT_BALCONY_SUMMON_REAL               = 9
 };
 
-enum Misc
+enum NothMisc
 {
     NPC_PLAGUED_WARRIOR                     = 16984,
     NPC_PLAGUED_CHAMPION                    = 16983,
@@ -155,7 +155,7 @@ public:
         void JustEngagedWith(Unit* who) override
         {
             BossAI::JustEngagedWith(who);
-            Talk(SAY_AGGRO);
+            Talk(NOTH_SAY_AGGRO);
             StartGroundPhase();
             if (pInstance)
             {
@@ -180,7 +180,7 @@ public:
                 me->NearTeleportTo(nothPosition.GetPositionX(), nothPosition.GetPositionY(), nothPosition.GetPositionZ(), nothPosition.GetOrientation(), true);
             }
             BossAI::JustDied(killer);
-            Talk(SAY_DEATH);
+            Talk(NOTH_SAY_DEATH);
             if (pInstance)
             {
                 if (GameObject* go = me->GetMap()->GetGameObject(pInstance->GetGuidData(DATA_NOTH_ENTRY_GATE)))
@@ -195,7 +195,7 @@ public:
             if (who->GetTypeId() != TYPEID_PLAYER)
                 return;
 
-            Talk(SAY_SLAY);
+            Talk(NOTH_SAY_SLAY);
             if (pInstance)
             {
                 pInstance->SetData(DATA_IMMORTAL_FAIL, 0);
@@ -225,8 +225,8 @@ public:
                     events.Repeat(25s);
                     break;
                 case EVENT_SUMMON_PLAGUED_WARRIOR_ANNOUNCE:
-                    Talk(SAY_SUMMON);
-                    Talk(EMOTE_SUMMON);
+                    Talk(NOTH_SAY_SUMMON);
+                    Talk(NOTH_EMOTE_SUMMON);
                     events.Repeat(30s);
                     events.ScheduleEvent(EVENT_SUMMON_PLAGUED_WARRIOR_REAL, 4s);
                     break;
@@ -235,7 +235,7 @@ public:
                     SummonHelper(NPC_PLAGUED_WARRIOR, RAID_MODE(2, 3));
                     break;
                 case EVENT_MOVE_TO_BALCONY:
-                    Talk(EMOTE_TELEPORT_BALCONY);
+                    Talk(NOTH_EMOTE_TELEPORT_BALCONY);
                     me->CastSpell(me, SPELL_TELEPORT, true);
                     StartBalconyPhase();
                     break;
@@ -243,12 +243,12 @@ public:
                     DoResetThreatList();
                     me->CastSpell(me, RAID_MODE(SPELL_CRIPPLE_10, SPELL_CRIPPLE_25), false);
                     me->CastSpell(me, SPELL_BLINK, true);
-                    Talk(EMOTE_BLINK);
+                    Talk(NOTH_EMOTE_BLINK);
                     events.Repeat(30s);
                     break;
                 // BALCONY
                 case EVENT_BALCONY_SUMMON_ANNOUNCE:
-                    Talk(EMOTE_SUMMON_WAVE);
+                    Talk(NOTH_EMOTE_SUMMON_WAVE);
                     events.Repeat(30s);
                     events.ScheduleEvent(EVENT_BALCONY_SUMMON_REAL, 4s);
                     break;
@@ -269,12 +269,12 @@ public:
                     }
                     break;
                 case EVENT_MOVE_TO_GROUND:
-                    Talk(EMOTE_TELEPORT_BACK);
+                    Talk(NOTH_EMOTE_TELEPORT_BACK);
                     me->CastSpell(me, SPELL_TELEPORT_BACK, true);
                     timesInBalcony++;
                     if (timesInBalcony == 3)
                     {
-                        DoCastSelf(SPELL_BERSERK);
+                        DoCastSelf(NOTH_SPELL_BERSERK);
                     }
                     StartGroundPhase();
                     break;

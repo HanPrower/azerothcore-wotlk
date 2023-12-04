@@ -8,40 +8,40 @@
 #include "SpellScriptLoader.h"
 #include "naxxramas.h"
 
-enum Spells
+enum GluthSpells
 {
-    SPELL_MORTAL_WOUND                  = 25646,
+    GLUTH_SPELL_MORTAL_WOUND            = 25646,
     SPELL_ENRAGE_10                     = 28371,
     SPELL_ENRAGE_25                     = 54427,
     SPELL_DECIMATE_10                   = 28374,
     SPELL_DECIMATE_25                   = 54426,
-    SPELL_BERSERK                       = 26662,
+    GLUTH_SPELL_BERSERK                 = 26662,
     SPELL_INFECTED_WOUND                = 29306,
     SPELL_CHOW_SEARCHER                 = 28404
 };
 
-enum Events
+enum GluthEvents
 {
-    EVENT_MORTAL_WOUND                  = 1,
-    EVENT_ENRAGE                        = 2,
-    EVENT_DECIMATE                      = 3,
-    EVENT_BERSERK                       = 4,
-    EVENT_SUMMON_ZOMBIE                 = 5,
-    EVENT_CAN_EAT_ZOMBIE                = 6
+    GLUTH_EVENT_MORTAL_WOUND            = 1,
+    GLUTH_EVENT_ENRAGE                  = 2,
+    GLUTH_EVENT_DECIMATE                = 3,
+    GLUTH_EVENT_BERSERK                 = 4,
+    GLUTH_EVENT_SUMMON_ZOMBIE           = 5,
+    GLUTH_EVENT_CAN_EAT_ZOMBIE          = 6
 };
 
-enum Misc
+enum GluthMisc
 {
     NPC_ZOMBIE_CHOW                     = 16360
 };
 
-enum Emotes
+enum GluthEmotes
 {
     EMOTE_SPOTS_ONE                     = 0,
     EMOTE_DECIMATE                      = 1,
-    EMOTE_ENRAGE                        = 2,
+    GLUTH_EMOTE_ENRAGE                  = 2,
     EMOTE_DEVOURS_ALL                   = 3,
-    EMOTE_BERSERK                       = 4
+    GLUTH_EMOTE_BERSERK                 = 4
 };
 
 const Position zombiePos[3] =
@@ -101,12 +101,12 @@ public:
         {
             BossAI::JustEngagedWith(who);
             me->SetInCombatWithZone();
-            events.ScheduleEvent(EVENT_MORTAL_WOUND, 10s);
-            events.ScheduleEvent(EVENT_ENRAGE, 22s);
-            events.ScheduleEvent(EVENT_DECIMATE, RAID_MODE(110000, 90000));
-            events.ScheduleEvent(EVENT_BERSERK, 6min);
-            events.ScheduleEvent(EVENT_SUMMON_ZOMBIE, 10s);
-            events.ScheduleEvent(EVENT_CAN_EAT_ZOMBIE, 1s);
+            events.ScheduleEvent(GLUTH_EVENT_MORTAL_WOUND, 10s);
+            events.ScheduleEvent(GLUTH_EVENT_ENRAGE, 22s);
+            events.ScheduleEvent(GLUTH_EVENT_DECIMATE, RAID_MODE(110000, 90000));
+            events.ScheduleEvent(GLUTH_EVENT_BERSERK, 6min);
+            events.ScheduleEvent(GLUTH_EVENT_SUMMON_ZOMBIE, 10s);
+            events.ScheduleEvent(GLUTH_EVENT_CAN_EAT_ZOMBIE, 1s);
         }
 
         void JustSummoned(Creature* summon) override
@@ -170,24 +170,24 @@ public:
 
             switch (events.ExecuteEvent())
             {
-                case EVENT_BERSERK:
-                    me->CastSpell(me, SPELL_BERSERK, true);
+                case GLUTH_EVENT_BERSERK:
+                    me->CastSpell(me, GLUTH_SPELL_BERSERK, true);
                     break;
-                case EVENT_ENRAGE:
-                    Talk(EMOTE_ENRAGE);
+                case GLUTH_EVENT_ENRAGE:
+                    Talk(GLUTH_EMOTE_ENRAGE);
                     me->CastSpell(me, RAID_MODE(SPELL_ENRAGE_10, SPELL_ENRAGE_25), true);
                     events.Repeat(22s);
                     break;
-                case EVENT_MORTAL_WOUND:
-                    me->CastSpell(me->GetVictim(), SPELL_MORTAL_WOUND, false);
+                case GLUTH_EVENT_MORTAL_WOUND:
+                    me->CastSpell(me->GetVictim(), GLUTH_SPELL_MORTAL_WOUND, false);
                     events.Repeat(10s);
                     break;
-                case EVENT_DECIMATE:
+                case GLUTH_EVENT_DECIMATE:
                     Talk(EMOTE_DECIMATE);
                     me->CastSpell(me, RAID_MODE(SPELL_DECIMATE_10, SPELL_DECIMATE_25), false);
                     events.RepeatEvent(RAID_MODE(110000, 90000));
                     break;
-                case EVENT_SUMMON_ZOMBIE:
+                case GLUTH_EVENT_SUMMON_ZOMBIE:
                     {
                         uint8 rand = urand(0, 2);
                         for (int32 i = 0; i < RAID_MODE(1, 2); ++i)
@@ -208,7 +208,7 @@ public:
                         events.Repeat(10s);
                         break;
                     }
-                case EVENT_CAN_EAT_ZOMBIE:
+                case GLUTH_EVENT_CAN_EAT_ZOMBIE:
                     events.RepeatEvent(1000);
                     if (me->GetVictim()->GetEntry() == NPC_ZOMBIE_CHOW && me->IsWithinMeleeRange(me->GetVictim()))
                     {

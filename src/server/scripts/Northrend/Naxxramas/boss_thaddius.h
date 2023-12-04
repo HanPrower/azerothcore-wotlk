@@ -9,7 +9,7 @@
 #include "SpellScriptLoader.h"
 #include "naxxramas.h"
 
-enum Says
+enum ThaddiusSays
 {
     // Stalagg
     SAY_STAL_AGGRO                      = 0,
@@ -26,11 +26,11 @@ enum Says
     EMOTE_FEUG_REVIVE                   = 4,
 
     // Thaddius
-    SAY_GREET                           = 0,
-    SAY_AGGRO                           = 1,
-    SAY_SLAY                            = 2,
-    SAY_ELECT                           = 3,
-    SAY_DEATH                           = 4,
+    THADDIUS_SAY_GREET                  = 0,
+    THADDIUS_SAY_AGGRO                  = 1,
+    THADDIUS_SAY_SLAY                   = 2,
+    THADDIUS_SAY_ELECT                  = 3,
+    THADDIUS_SAY_DEATH                  = 4,
     EMOTE_POLARITY_SHIFTED              = 6,
 
     // Tesla Coil
@@ -38,7 +38,7 @@ enum Says
     EMOTE_TESLA_OVERLOAD                = 1
 };
 
-enum Spells
+enum ThaddiusSpells
 {
     SPELL_MAGNETIC_PULL                 = 28337,
     SPELL_TESLA_SHOCK                   = 28099,
@@ -59,7 +59,7 @@ enum Spells
     SPELL_BALL_LIGHTNING                = 28299,
     SPELL_CHAIN_LIGHTNING_10            = 28167,
     SPELL_CHAIN_LIGHTNING_25            = 54531,
-    SPELL_BERSERK                       = 27680,
+    THADDIUS_SPELL_BERSERK              = 27680,
     SPELL_THADDIUS_VISUAL_LIGHTNING     = 28136,
     SPELL_THADDIUS_SPAWN_STUN           = 28160,
 
@@ -71,7 +71,7 @@ enum Spells
     SPELL_NEGATIVE_POLARITY             = 28084
 };
 
-enum Events
+enum ThaddiusEvents
 {
     EVENT_MINION_POWER_SURGE            = 1,
     EVENT_MINION_MAGNETIC_PULL          = 2,
@@ -86,7 +86,7 @@ enum Events
     EVENT_ALLOW_BALL_LIGHTNING          = 10
 };
 
-enum Misc
+enum ThaddiusMisc
 {
     ACTION_MAGNETIC_PULL                = 1,
     ACTION_SUMMON_DIED                  = 2,
@@ -199,7 +199,7 @@ public:
             if (who->GetTypeId() != TYPEID_PLAYER)
                 return;
 
-            Talk(SAY_SLAY);
+            Talk(THADDIUS_SAY_SLAY);
             if (pInstance)
             {
                 pInstance->SetData(DATA_IMMORTAL_FAIL, 0);
@@ -209,7 +209,7 @@ public:
         void JustDied(Unit*  killer) override
         {
             BossAI::JustDied(killer);
-            Talk(SAY_DEATH);
+            Talk(THADDIUS_SAY_DEATH);
             if (pInstance)
             {
                 pInstance->DoRemoveAurasDueToSpellOnPlayers(SPELL_POSITIVE_POLARITY);
@@ -316,7 +316,7 @@ public:
                     break;
                 }
                 case EVENT_THADDIUS_ENTER_COMBAT:
-                    Talk(SAY_AGGRO);
+                    Talk(THADDIUS_SAY_AGGRO);
                     me->SetReactState(REACT_AGGRESSIVE);
                     me->SetControlled(false, UNIT_STATE_STUNNED);
                     me->RemoveUnitFlag(UNIT_FLAG_NON_ATTACKABLE);
@@ -326,7 +326,7 @@ public:
                     events.ScheduleEvent(EVENT_ALLOW_BALL_LIGHTNING, 5s);
                     return;
                 case EVENT_THADDIUS_BERSERK:
-                    me->CastSpell(me, SPELL_BERSERK, true);
+                    me->CastSpell(me, THADDIUS_SPELL_BERSERK, true);
                     break;
                 case EVENT_THADDIUS_CHAIN_LIGHTNING:
                     me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_CHAIN_LIGHTNING_10, SPELL_CHAIN_LIGHTNING_25), false);
@@ -690,7 +690,7 @@ public:
                 {
                     if (caster->GetEntry() == NPC_THADDIUS)
                     {
-                        caster->AI()->Talk(SAY_ELECT);
+                        caster->AI()->Talk(THADDIUS_SAY_ELECT);
                         caster->AI()->Talk(EMOTE_POLARITY_SHIFTED);
                     }
                 }
@@ -744,7 +744,7 @@ public:
 
         if (Creature* thaddius = ObjectAccessor::GetCreature(*player, instance->GetGuidData(DATA_THADDIUS_BOSS)))
         {
-            thaddius->AI()->Talk(SAY_GREET);
+            thaddius->AI()->Talk(THADDIUS_SAY_GREET);
         }
         instance->SetData(DATA_HAD_THADDIUS_GREET, 1);
 

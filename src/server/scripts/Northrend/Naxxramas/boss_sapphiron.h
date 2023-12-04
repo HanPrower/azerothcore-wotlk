@@ -8,15 +8,15 @@
 #include "SpellScriptLoader.h"
 #include "naxxramas.h"
 
-enum Yells
+enum SapphironYells
 {
     EMOTE_AIR_PHASE         = 0,
     EMOTE_GROUND_PHASE      = 1,
     EMOTE_BREATH            = 2,
-    EMOTE_ENRAGE            = 3
+    SAPPHIRON_EMOTE_ENRAGE  = 3
 };
 
-enum Spells
+enum SapphironSpells
 {
     // Fight
     SPELL_FROST_AURA_10             = 28531,
@@ -39,7 +39,7 @@ enum Spells
     SPELL_SAPPHIRON_DIES            = 29357
 };
 
-enum Misc
+enum SapphironMisc
 {
     GO_ICE_BLOCK                    = 181247,
     NPC_BLIZZARD                    = 16474,
@@ -47,9 +47,9 @@ enum Misc
     POINT_CENTER                    = 1
 };
 
-enum Events
+enum SapphironEvents
 {
-    EVENT_BERSERK                   = 1,
+    SAPPHIRON_EVENT_BERSERK         = 1,
     EVENT_CLEAVE                    = 2,
     EVENT_TAIL_SWEEP                = 3,
     EVENT_LIFE_DRAIN                = 4,
@@ -150,7 +150,7 @@ public:
             BossAI::JustEngagedWith(who);
             EnterCombatSelfFunction();
             me->CastSpell(me, RAID_MODE(SPELL_FROST_AURA_10, SPELL_FROST_AURA_25), true);
-            events.ScheduleEvent(EVENT_BERSERK, 15min);
+            events.ScheduleEvent(SAPPHIRON_EVENT_BERSERK, 15min);
             events.ScheduleEvent(EVENT_CLEAVE, 5s);
             events.ScheduleEvent(EVENT_TAIL_SWEEP, 10s);
             events.ScheduleEvent(EVENT_LIFE_DRAIN, 17s);
@@ -240,8 +240,8 @@ public:
 
             switch (events.ExecuteEvent())
             {
-                case EVENT_BERSERK:
-                    Talk(EMOTE_ENRAGE);
+                case SAPPHIRON_EVENT_BERSERK:
+                    Talk(SAPPHIRON_EMOTE_ENRAGE);
                     me->CastSpell(me, SPELL_BERSERK, true);
                     return;
                 case EVENT_CLEAVE:

@@ -6,7 +6,7 @@
 #include "ScriptedCreature.h"
 #include "naxxramas.h"
 
-enum Spells
+enum MaexxnaSpells
 {
     SPELL_WEB_WRAP                      = 28622,
     SPELL_WEB_SPRAY_10                  = 29484,
@@ -19,7 +19,7 @@ enum Spells
     SPELL_FRENZY_25                     = 54124
 };
 
-enum Events
+enum MaexxnaEvents
 {
     EVENT_WEB_SPRAY                     = 1,
     EVENT_POISON_SHOCK                  = 2,
@@ -29,14 +29,14 @@ enum Events
     EVENT_SUMMON_SPIDERLINGS            = 6
 };
 
-enum Emotes
+enum MaexxnaEmotes
 {
     EMOTE_SPIDERS                       = 0,
     EMOTE_WEB_WRAP                      = 1,
     EMOTE_WEB_SPRAY                     = 2
 };
 
-enum Misc
+enum MaexxnaMisc
 {
     NPC_WEB_WRAP                        = 16486,
     NPC_MAEXXNA_SPIDERLING              = 17055

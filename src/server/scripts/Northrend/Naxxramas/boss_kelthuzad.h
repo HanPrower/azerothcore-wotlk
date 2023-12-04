@@ -8,25 +8,25 @@
 #include "SpellScriptLoader.h"
 #include "naxxramas.h"
 
-enum Yells
+enum KelthuzadYells
 {
-    SAY_ANSWER_REQUEST                      = 3,
-    SAY_TAUNT                               = 6,
-    SAY_AGGRO                               = 7,
-    SAY_SLAY                                = 8,
-    SAY_DEATH                               = 9,
-    SAY_CHAIN                               = 10,
-    SAY_FROST_BLAST                         = 11,
-    SAY_REQUEST_AID                         = 12,
-    EMOTE_PHASE_TWO                         = 13,
-    SAY_SUMMON_MINIONS                      = 14,
-    SAY_SPECIAL                             = 15,
+    KELTHUZAD_SAY_ANSWER_REQUEST                      = 3,
+    KELTHUZAD_SAY_TAUNT                               = 6,
+    KELTHUZAD_SAY_AGGRO                               = 7,
+    KELTHUZAD_SAY_SLAY                                = 8,
+    KELTHUZAD_SAY_DEATH                               = 9,
+    KELTHUZAD_SAY_CHAIN                               = 10,
+    KELTHUZAD_SAY_FROST_BLAST                         = 11,
+    KELTHUZAD_SAY_REQUEST_AID                         = 12,
+    KELTHUZAD_EMOTE_PHASE_TWO                         = 13,
+    KELTHUZAD_SAY_SUMMON_MINIONS                      = 14,
+    KELTHUZAD_SAY_SPECIAL                             = 15,
 
-    EMOTE_GUARDIAN_FLEE                     = 0,
-    EMOTE_GUARDIAN_APPEAR                   = 1
+    KELTHUZAD_EMOTE_GUARDIAN_FLEE                     = 0,
+    KELTHUZAD_EMOTE_GUARDIAN_APPEAR                   = 1
 };
 
-enum Spells
+enum KelthuzadSpells
 {
     // Kel'Thzuad
     SPELL_FROST_BOLT_SINGLE_10              = 28478,
@@ -39,16 +39,16 @@ enum Spells
     SPELL_MANA_DETONATION_DAMAGE            = 27820,
     SPELL_FROST_BLAST                       = 27808,
     SPELL_CHAINS_OF_KELTHUZAD               = 28410, // 28408 script effect
-    SPELL_BERSERK                           = 28498,
+    KELTHUZAD_SPELL_BERSERK                 = 28498,
     SPELL_KELTHUZAD_CHANNEL                 = 29423,
 
     // Minions
-    SPELL_FRENZY                            = 28468,
-    SPELL_MORTAL_WOUND                      = 28467,
+    KELTHUZAD_SPELL_FRENZY                  = 28468,
+    KELTHUZAD_SPELL_MORTAL_WOUND            = 28467,
     SPELL_BLOOD_TAP                         = 28470
 };
 
-enum Misc
+enum KelthuzadMisc
 {
     NPC_SOLDIER_OF_THE_FROZEN_WASTES        = 16427,
     NPC_UNSTOPPABLE_ABOMINATION             = 16428,
@@ -61,24 +61,24 @@ enum Misc
     ACTION_GUARDIANS_OFF                    = 4
 };
 
-enum Event
+enum KelthuzadEvent
 {
     // Kel'Thuzad
     EVENT_SUMMON_SOLDIER                    = 1,
     EVENT_SUMMON_UNSTOPPABLE_ABOMINATION    = 2,
     EVENT_SUMMON_SOUL_WEAVER                = 3,
-    EVENT_PHASE_2                           = 4,
+    KELTHUZAD_EVENT_PHASE_2                 = 4,
     EVENT_FROST_BOLT_SINGLE                 = 5,
     EVENT_FROST_BOLT_MULTI                  = 6,
     EVENT_DETONATE_MANA                     = 7,
-    EVENT_PHASE_3                           = 8,
+    KELTHUZAD_EVENT_PHASE_3                 = 8,
     EVENT_P3_LICH_KING_SAY                  = 9,
     EVENT_SHADOW_FISSURE                    = 10,
     EVENT_FROST_BLAST                       = 11,
     EVENT_CHAINS                            = 12,
     EVENT_SUMMON_GUARDIAN_OF_ICECROWN       = 13,
     EVENT_FLOOR_CHANGE                      = 14,
-    EVENT_ENRAGE                            = 15,
+    KELTHUZAD_EVENT_ENRAGE                  = 15,
     EVENT_SPAWN_POOL                        = 16,
 
     // Minions
@@ -252,7 +252,7 @@ public:
             if (who->GetTypeId() != TYPEID_PLAYER)
                 return;
 
-            Talk(SAY_SLAY);
+            Talk(KELTHUZAD_SAY_SLAY);
             if (pInstance)
             {
                 pInstance->SetData(DATA_IMMORTAL_FAIL, 0);
@@ -265,9 +265,9 @@ public:
             summons.DoAction(ACTION_GUARDIANS_OFF);
             if (Creature* guardian = summons.GetCreatureWithEntry(NPC_GUARDIAN_OF_ICECROWN))
             {
-                guardian->AI()->Talk(EMOTE_GUARDIAN_FLEE);
+                guardian->AI()->Talk(KELTHUZAD_EMOTE_GUARDIAN_FLEE);
             }
-            Talk(SAY_DEATH);
+            Talk(KELTHUZAD_SAY_DEATH);
             if (pInstance)
             {
                 if (GameObject* go = me->GetMap()->GetGameObject(pInstance->GetGuidData(DATA_KELTHUZAD_GATE)))
@@ -286,7 +286,7 @@ public:
         void JustEngagedWith(Unit* who) override
         {
             BossAI::JustEngagedWith(who);
-            Talk(SAY_SUMMON_MINIONS);
+            Talk(KELTHUZAD_SAY_SUMMON_MINIONS);
             me->SetUnitFlag(UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE);
             me->RemoveAllAttackers();
             me->SetTarget();
@@ -296,8 +296,8 @@ public:
             events.ScheduleEvent(EVENT_SUMMON_SOLDIER, 6400ms);
             events.ScheduleEvent(EVENT_SUMMON_UNSTOPPABLE_ABOMINATION, 10s);
             events.ScheduleEvent(EVENT_SUMMON_SOUL_WEAVER, 12s);
-            events.ScheduleEvent(EVENT_PHASE_2, 228s);
-            events.ScheduleEvent(EVENT_ENRAGE, 15min);
+            events.ScheduleEvent(KELTHUZAD_EVENT_PHASE_2, 228s);
+            events.ScheduleEvent(KELTHUZAD_EVENT_ENRAGE, 15min);
             if (pInstance)
             {
                 if (GameObject* go = me->GetMap()->GetGameObject(pInstance->GetGuidData(DATA_KELTHUZAD_FLOOR)))
@@ -365,9 +365,9 @@ public:
                     SummonHelper(NPC_SOUL_WEAVER, 1);
                     events.Repeat(30s);
                     break;
-                case EVENT_PHASE_2:
-                    Talk(EMOTE_PHASE_TWO);
-                    Talk(SAY_AGGRO);
+                case KELTHUZAD_EVENT_PHASE_2:
+                    Talk(KELTHUZAD_EMOTE_PHASE_TWO);
+                    Talk(KELTHUZAD_SAY_AGGRO);
                     events.Reset();
                     summons.DoAction(ACTION_SECOND_PHASE);
                     me->RemoveUnitFlag(UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE);
@@ -377,7 +377,7 @@ public:
                     events.ScheduleEvent(EVENT_FROST_BOLT_SINGLE, 2s, 10s);
                     events.ScheduleEvent(EVENT_FROST_BOLT_MULTI, 15s, 30s);
                     events.ScheduleEvent(EVENT_DETONATE_MANA, 30s);
-                    events.ScheduleEvent(EVENT_PHASE_3, 1s);
+                    events.ScheduleEvent(KELTHUZAD_EVENT_PHASE_3, 1s);
                     events.ScheduleEvent(EVENT_SHADOW_FISSURE, 25s);
                     events.ScheduleEvent(EVENT_FROST_BLAST, 45s);
                     if (Is25ManRaid())
@@ -385,8 +385,8 @@ public:
                         events.ScheduleEvent(EVENT_CHAINS, 90s);
                     }
                     break;
-                case EVENT_ENRAGE:
-                    me->CastSpell(me, SPELL_BERSERK, true);
+                case KELTHUZAD_EVENT_ENRAGE:
+                    me->CastSpell(me, KELTHUZAD_SPELL_BERSERK, true);
                     break;
                 case EVENT_FROST_BOLT_SINGLE:
                     me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_FROST_BOLT_SINGLE_10, SPELL_FROST_BOLT_SINGLE_25), false);
@@ -408,7 +408,7 @@ public:
                     {
                         me->CastSpell(target, SPELL_FROST_BLAST, false);
                     }
-                    Talk(SAY_FROST_BLAST);
+                    Talk(KELTHUZAD_SAY_FROST_BLAST);
                     events.Repeat(45s);
                     break;
                 case EVENT_CHAINS:
@@ -419,7 +419,7 @@ public:
                             me->CastSpell(target, SPELL_CHAINS_OF_KELTHUZAD, true);
                         }
                     }
-                    Talk(SAY_CHAIN);
+                    Talk(KELTHUZAD_SAY_CHAIN);
                     events.Repeat(90s);
                     break;
                 case EVENT_DETONATE_MANA:
@@ -440,15 +440,15 @@ public:
                             auto itr = unitList.begin();
                             advance(itr, urand(0, unitList.size() - 1));
                             me->CastSpell(*itr, SPELL_DETONATE_MANA, false);
-                            Talk(SAY_SPECIAL);
+                            Talk(KELTHUZAD_SAY_SPECIAL);
                         }
                         events.Repeat(30s);
                         break;
                     }
-                case EVENT_PHASE_3:
+                case KELTHUZAD_EVENT_PHASE_3:
                     if (me->HealthBelowPct(45))
                     {
-                        Talk(SAY_REQUEST_AID);
+                        Talk(KELTHUZAD_SAY_REQUEST_AID);
                         events.DelayEvents(5500ms);
                         events.ScheduleEvent(EVENT_P3_LICH_KING_SAY, 5s);
                         if (GameObject* go = me->GetMap()->GetGameObject(pInstance->GetGuidData(DATA_KELTHUZAD_PORTAL_1)))
@@ -476,7 +476,7 @@ public:
                     {
                         if (Creature* cr = ObjectAccessor::GetCreature(*me, pInstance->GetGuidData(DATA_LICH_KING_BOSS)))
                         {
-                            cr->AI()->Talk(SAY_ANSWER_REQUEST);
+                            cr->AI()->Talk(KELTHUZAD_SAY_ANSWER_REQUEST);
                         }
                     }
                     for (uint8 i = 0 ; i < RAID_MODE(2, 4); ++i)
@@ -487,7 +487,7 @@ public:
                 case EVENT_SUMMON_GUARDIAN_OF_ICECROWN:
                     if (Creature* cr = me->SummonCreature(NPC_GUARDIAN_OF_ICECROWN, SpawnPool[RAND(0, 1, 3, 4)]))
                     {
-                        cr->AI()->Talk(EMOTE_GUARDIAN_APPEAR);
+                        cr->AI()->Talk(KELTHUZAD_EMOTE_GUARDIAN_APPEAR);
                         cr->AI()->AttackStart(me->GetVictim());
                     }
                     break;
@@ -630,13 +630,13 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_MINION_MORTAL_WOUND:
-                    me->CastSpell(me->GetVictim(), SPELL_MORTAL_WOUND, false);
+                    me->CastSpell(me->GetVictim(), KELTHUZAD_SPELL_MORTAL_WOUND, false);
                     events.Repeat(15s);
                     break;
                 case EVENT_MINION_FRENZY:
                     if (me->HealthBelowPct(35))
                     {
-                        me->CastSpell(me, SPELL_FRENZY, true);
+                        me->CastSpell(me, KELTHUZAD_SPELL_FRENZY, true);
                         break;
                     }
                     events.Repeat(1s);

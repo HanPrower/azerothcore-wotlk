@@ -9,21 +9,21 @@
 #include "SpellScriptLoader.h"
 #include "naxxramas.h"
 
-enum Yells
+enum GothikYells
 {
-    SAY_INTRO_1                     = 0,
-    SAY_INTRO_2                     = 1,
-    SAY_INTRO_3                     = 2,
-    SAY_INTRO_4                     = 3,
-    SAY_PHASE_TWO                   = 4,
-    SAY_DEATH                       = 5,
-    SAY_KILL                        = 6,
+    GOTHIK_SAY_INTRO_1              = 0,
+    GOTHIK_SAY_INTRO_2              = 1,
+    GOTHIK_SAY_INTRO_3              = 2,
+    GOTHIK_SAY_INTRO_4              = 3,
+    GOTHIK_SAY_PHASE_TWO            = 4,
+    GOTHIK_SAY_DEATH                = 5,
+    GOTHIK_SAY_KILL                 = 6,
 
-    EMOTE_PHASE_TWO                 = 7,
-    EMOTE_GATE_OPENED               = 8
+    GOTHIK_EMOTE_PHASE_TWO          = 7,
+    GOTHIK_EMOTE_GATE_OPENED        = 8
 };
 
-enum Spells
+enum GothikSpells
 {
     // Gothik
     SPELL_HARVEST_SOUL              = 28679,
@@ -59,7 +59,7 @@ enum Spells
     SPELL_STOMP                     = 27993
 };
 
-enum Misc
+enum GothikMisc
 {
     NPC_LIVING_TRAINEE              = 16124,
     NPC_LIVING_KNIGHT               = 16125,
@@ -71,7 +71,7 @@ enum Misc
     //NPC_TRIGGER                     = 16137, fix me
 };
 
-enum Events
+enum GothikEvents
 {
     // Gothik
     EVENT_SUMMON_ADDS               = 1,
@@ -240,7 +240,7 @@ public:
         {
             BossAI::JustEngagedWith(who);
             me->SetInCombatWithZone();
-            Talk(SAY_INTRO_1);
+            Talk(GOTHIK_SAY_INTRO_1);
             events.ScheduleEvent(EVENT_INTRO_2, 4s);
             events.ScheduleEvent(EVENT_INTRO_3, 9s);
             events.ScheduleEvent(EVENT_INTRO_4, 14s);
@@ -302,7 +302,7 @@ public:
             if (who->GetTypeId() != TYPEID_PLAYER)
                 return;
 
-            Talk(SAY_KILL);
+            Talk(GOTHIK_SAY_KILL);
             if (pInstance)
             {
                 pInstance->SetData(DATA_IMMORTAL_FAIL, 0);
@@ -312,7 +312,7 @@ public:
         void JustDied(Unit*  killer) override
         {
             BossAI::JustDied(killer);
-            Talk(SAY_DEATH);
+            Talk(GOTHIK_SAY_DEATH);
             summons.DespawnAll();
             if (pInstance)
             {
@@ -432,13 +432,13 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_INTRO_2:
-                    Talk(SAY_INTRO_2);
+                    Talk(GOTHIK_SAY_INTRO_2);
                     break;
                 case EVENT_INTRO_3:
-                    Talk(SAY_INTRO_3);
+                    Talk(GOTHIK_SAY_INTRO_3);
                     break;
                 case EVENT_INTRO_4:
-                    Talk(SAY_INTRO_4);
+                    Talk(GOTHIK_SAY_INTRO_4);
                     break;
                 case EVENT_SHADOW_BOLT:
                     me->CastSpell(me->GetVictim(), RAID_MODE(SPELL_SHADOW_BOLT_10, SPELL_SHADOW_BOLT_25), false);
@@ -487,8 +487,8 @@ public:
                     else
                     {
                         secondPhase = true;
-                        Talk(SAY_PHASE_TWO);
-                        Talk(EMOTE_PHASE_TWO);
+                        Talk(GOTHIK_SAY_PHASE_TWO);
+                        Talk(GOTHIK_EMOTE_PHASE_TWO);
                         me->CastSpell(me, SPELL_TELEPORT_LIVE, false);
                         me->SetReactState(REACT_AGGRESSIVE);
                         me->RemoveUnitFlag(UNIT_FLAG_DISABLE_MOVE);
@@ -509,7 +509,7 @@ public:
                             go->SetGoState(GO_STATE_ACTIVE);
                         }
                         gateOpened = true;
-                        Talk(EMOTE_GATE_OPENED);
+                        Talk(GOTHIK_EMOTE_GATE_OPENED);
                     }
                     break;
             }
