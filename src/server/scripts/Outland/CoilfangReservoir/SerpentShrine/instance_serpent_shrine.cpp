@@ -47,6 +47,13 @@ MinionData const minionData[] =
     { 0,                          0,                          }
 };
 
+BossBoundaryData const boundaries =
+{
+    { DATA_FATHOM_LORD_KARATHRESS, new RectangleBoundary(456.86f, 571.56f, -602.07f, -449.59f) },
+    { DATA_MOROGRIM_TIDEWALKER,    new RectangleBoundary(304.32f, 457.59f, -786.5f, -661.3f) },
+    { DATA_LADY_VASHJ,             new CircleBoundary(Position(29.99f, -922.409f), 83.65f) }
+};
+
 class instance_serpent_shrine : public InstanceMapScript
 {
 public:
@@ -63,8 +70,9 @@ public:
             LoadDoorData(doorData);
             LoadObjectData(creatureData, nullptr);
             LoadMinionData(minionData);
+            LoadBossBoundaries(boundaries);
 
-            AliveKeepersCount = 0;
+            _aliveKeepersCount = 0;
         }
 
         bool SetBossState(uint32 type, EncounterState state) override
@@ -74,7 +82,7 @@ public:
 
             if (type == DATA_LADY_VASHJ)
                 for (uint8 i = 0; i < 4; ++i)
-                    if (GameObject* gobject = instance->GetGameObject(ShieldGeneratorGUID[i]))
+                    if (GameObject* gobject = instance->GetGameObject(_shieldGeneratorGUID[i]))
                         gobject->SetGameObjectFlag(GO_FLAG_NOT_SELECTABLE);
 
             return true;
@@ -88,7 +96,7 @@ public:
                 case GO_SHIELD_GENERATOR2:
                 case GO_SHIELD_GENERATOR3:
                 case GO_SHIELD_GENERATOR4:
-                    ShieldGeneratorGUID[go->GetEntry() - GO_SHIELD_GENERATOR1] = go->GetGUID();
+                    _shieldGeneratorGUID[go->GetEntry() - GO_SHIELD_GENERATOR1] = go->GetGUID();
                     break;
             }
 
@@ -101,8 +109,8 @@ public:
             {
                 case NPC_COILFANG_SHATTERER:
                 case NPC_COILFANG_PRIESTESS:
-                    if (creature->GetPositionX() > -110.0f && creature->GetPositionX() < 155.0f && creature->GetPositionY() > -610.0f && creature->GetPositionY() < -280.0f)
-                        AliveKeepersCount += creature->IsAlive() ? 0 : -1; // SmartAI calls JUST_RESPAWNED in AIInit...
+                    if (creature->GetPositionX() > 190.0f)
+                        --_aliveKeepersCount;
                     break;
                 case NPC_CYCLONE_KARATHRESS:
                     creature->GetMotionMaster()->MoveRandom(50.0f);
@@ -125,10 +133,16 @@ public:
             switch (type)
             {
                 case DATA_PLATFORM_KEEPER_RESPAWNED:
-                    ++AliveKeepersCount;
+                    if (_aliveKeepersCount < MAX_KEEPER_COUNT)
+                    {
+                        ++_aliveKeepersCount;
+                    }
                     break;
                 case DATA_PLATFORM_KEEPER_DIED:
-                    --AliveKeepersCount;
+                    if (_aliveKeepersCount > MIN_KEEPER_COUNT)
+                    {
+                        --_aliveKeepersCount;
+                    }
                     break;
                 case DATA_BRIDGE_ACTIVATED:
                     SetBossState(DATA_BRIDGE_EMERGED, NOT_STARTED);
@@ -137,7 +151,7 @@ public:
                 case DATA_ACTIVATE_SHIELD:
                     if (Creature* vashj = GetCreature(DATA_LADY_VASHJ))
                     {
-                        for (auto const& shieldGuid : ShieldGeneratorGUID)
+                        for (auto const& shieldGuid : _shieldGeneratorGUID)
                         {
                             if (GameObject* gobject = instance->GetGameObject(shieldGuid))
                             {
@@ -153,14 +167,14 @@ public:
         uint32 GetData(uint32 type) const override
         {
             if (type == DATA_ALIVE_KEEPERS)
-                return AliveKeepersCount;
+                return _aliveKeepersCount;
 
             return 0;
         }
 
     private:
-        ObjectGuid ShieldGeneratorGUID[4];
-        int32 AliveKeepersCount;
+        ObjectGuid _shieldGeneratorGUID[4];
+        int32 _aliveKeepersCount;
     };
 
     InstanceScript* GetInstanceScript(InstanceMap* map) const override
